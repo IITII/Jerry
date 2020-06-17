@@ -4,6 +4,7 @@ package jn_s17204117.service.handle;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import jn_s17204117.service.response.DefaultResponse;
+import jn_s17204117.utils.JerryLogger;
 import jn_s17204117.utils.UrlToStringPath;
 import org.apache.commons.io.FilenameUtils;
 
@@ -19,7 +20,7 @@ import java.util.Properties;
  * @author IITII
  */
 public class GetHandle extends HttpMethodHandle {
-    private Properties properties;
+    private final Properties properties;
 
     public GetHandle(Properties properties) {
         super(properties);
@@ -28,6 +29,7 @@ public class GetHandle extends HttpMethodHandle {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
+        super.handle(httpExchange);
         String url = httpExchange.getRequestURI().toString();
         if (url.matches("^/[\\s\\S]*")) {
             Path path = Paths.get(properties.getProperty("root"), url);
@@ -35,6 +37,11 @@ public class GetHandle extends HttpMethodHandle {
             if (!file.exists()) {
                 DefaultResponse.code404(httpExchange);
                 return;
+            }
+            if (httpExchange.getRequestURI().getQuery() != null) {
+                JerryLogger.getLogger("").info(httpExchange.getRequestURI()
+                        + ": "
+                        + httpExchange.getRequestURI().getQuery());
             }
             if (file.isDirectory()) {
                 file = new File(

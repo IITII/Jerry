@@ -51,7 +51,7 @@ public class JerryLogger {
         logger.setLevel(Level.parse(properties.getProperty("log.level", LOG_LEVEL)));
         FileHandler fileHandler = new FileHandler(
                 //设置日志文件文件名
-                getOrCreateLogFile(new JerryDate().getLogName())
+                getOrCreateLogFile(new JerryDate("yyyy-MM-dd").getLogName())
                         .toAbsolutePath()
                         .toString()
         );

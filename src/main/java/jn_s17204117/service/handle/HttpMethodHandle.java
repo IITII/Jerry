@@ -4,6 +4,7 @@ package jn_s17204117.service.handle;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import jn_s17204117.utils.JerryDate;
+import jn_s17204117.utils.JerryLogger;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -19,7 +20,7 @@ public class HttpMethodHandle implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-
+        JerryLogger.getLogger("").info(logReq(httpExchange));
     }
 
     /**
@@ -32,12 +33,12 @@ public class HttpMethodHandle implements HttpHandler {
     public String logReq(HttpExchange httpExchange) {
 
         return httpExchange.getRemoteAddress() +
-                "-" +
+                ", " +
                 new JerryDate().getDateString() +
-                "-" +
+                ", " +
                 httpExchange.getRequestMethod() +
-                "-" +
-                httpExchange.getRequestHeaders();
+                ", " +
+                httpExchange.getRequestURI();
 
     }
 }

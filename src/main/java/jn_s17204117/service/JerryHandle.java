@@ -29,7 +29,6 @@ public class JerryHandle implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Logger logger = JerryLogger.getLogger("");
-        logger.info(httpExchange.getRequestURI().toString());
         factory.execute(() -> {
             try {
                 if (Boolean.parseBoolean(properties.getProperty("autoindex"))) {

@@ -20,7 +20,7 @@ public class CheckHandler {
      * @return 是否为 Https 配置文件
      */
     public static Boolean isHttps(Properties properties) {
-        String[] httpsTag = "ssl.key ssl.crt".split("\\s");
+        String[] httpsTag = "ssl.file".split("\\s");
         for (String s : httpsTag) {
             // 空属性
             if (properties.getProperty(s) == null) {

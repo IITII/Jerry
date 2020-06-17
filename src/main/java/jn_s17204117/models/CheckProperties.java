@@ -13,7 +13,7 @@ import java.util.Properties;
  * @author IITII
  */
 public class CheckProperties {
-    final String allProp = "address port root autoindex ssl.key ssl.crt";
+    final String allProp = "address port root autoindex ssl.file ssl.password ssl.type ssl.protocol";
     final String necessaryProp = "address port root";
 
     public String[] getAllProp() {
@@ -51,8 +51,7 @@ public class CheckProperties {
         // 校验其他参数
         for (Object s : properties.keySet()) {
             switch ((String) s) {
-                case "ssl.crt":
-                case "ssl.key":
+                case "ssl.file":
                 case "root":
                     String root = properties.getProperty("root");
                     //非空

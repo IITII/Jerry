@@ -24,7 +24,7 @@ public class ReadProperties {
     /**
      * 校验配置文件，并获取参数
      *
-     * @return HashMap<String.String>
+     * @return properties
      */
     public Properties getProp() throws IOException {
         Properties properties = loadPropertiesFile();

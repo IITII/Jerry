@@ -1,16 +1,15 @@
-package service;
+package jn_s17204117.service;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import service.handle.GetHandle;
-import service.handle.PostHandle;
-import utils.JerryLogger;
+import jn_s17204117.service.handle.AutoIndexHandle;
+import jn_s17204117.service.handle.GetHandle;
+import jn_s17204117.service.handle.PostHandle;
+import jn_s17204117.utils.JerryLogger;
 
 import java.io.IOException;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
+import java.util.Properties;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -19,26 +18,28 @@ import java.util.logging.Logger;
  * @author IITII
  */
 public class JerryHandle implements HttpHandler {
-    /**
-     * https://blog.csdn.net/u011517841/article/details/79810689
-     */
-    ThreadPoolExecutor factory = new ThreadPoolExecutor(50,
-            Integer.MAX_VALUE / 100,
-            5,
-            TimeUnit.SECONDS,
-            new LinkedBlockingDeque<>(),
-            (ThreadFactory) Thread::new);
+    private final ThreadPoolExecutor factory;
+    private final Properties properties;
+
+    public JerryHandle(ThreadPoolExecutor factory, Properties properties) {
+        this.factory = factory;
+        this.properties = properties;
+    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        factory.prestartAllCoreThreads();
         Logger logger = JerryLogger.getLogger("");
+        logger.info(httpExchange.getRequestURI().toString());
         factory.execute(() -> {
             try {
+                if (Boolean.parseBoolean(properties.getProperty("autoindex"))) {
+                    new AutoIndexHandle(properties).handle(httpExchange);
+                    return;
+                }
                 if ("POST".equalsIgnoreCase(httpExchange.getRequestMethod())) {
-                    new PostHandle().handle(httpExchange);
+                    new PostHandle(properties).handle(httpExchange);
                 } else if ("GET".equalsIgnoreCase(httpExchange.getRequestMethod())) {
-                    new GetHandle().handle(httpExchange);
+                    new GetHandle(properties).handle(httpExchange);
                 } else {
                     logger.warning("Nonsupport HTTP Method!");
                 }
@@ -47,7 +48,5 @@ public class JerryHandle implements HttpHandler {
                 e.printStackTrace();
             }
         });
-//        Headers responseHeaders = httpExchange.getResponseHeaders();
-//        responseHeaders.set("Content-Type", "text/html;charset=utf-8");
     }
 }

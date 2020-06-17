@@ -1,17 +1,22 @@
-package service.handle;
+package jn_s17204117.service.handle;
 
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import utils.JerryDate;
+import jn_s17204117.utils.JerryDate;
 
 import java.io.IOException;
+import java.util.Properties;
 
 
 /**
  * @author IITII
  */
 public class HttpMethodHandle implements HttpHandler {
+
+    public HttpMethodHandle(Properties properties) {
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
@@ -22,8 +27,9 @@ public class HttpMethodHandle implements HttpHandler {
      * '$remote_addr - [$time_local] ' '"$request" $status' ' "$http_user_agent"'
      *
      * @param httpExchange HttpExchange
+     * @return String 访问日志消息
      */
-    public String logMsg(HttpExchange httpExchange) {
+    public String logReq(HttpExchange httpExchange) {
 
         return httpExchange.getRemoteAddress() +
                 "-" +

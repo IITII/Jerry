@@ -1,7 +1,7 @@
-package service;
+package jn_s17204117.service;
 
-import models.ReadProperties;
-import utils.JerryLogger;
+import jn_s17204117.models.ReadProperties;
+import jn_s17204117.utils.JerryLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +25,10 @@ public class Servers {
             TimeUnit.SECONDS,
             new LinkedBlockingDeque<>(),
             (ThreadFactory) Thread::new);
-    private final String siteDir = Objects.requireNonNull(getClass().getClassLoader().getResource("conf/sites")).toString();
+    private final String siteDir = Objects.requireNonNull(getClass().getClassLoader().getResource("conf/sites")).getFile();
 
     public void init() {
+        // 因为站点数量一般不般比较少，而且不会频繁变动，故只预热一个线程
         factory.prestartCoreThread();
     }
 

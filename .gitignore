@@ -2,7 +2,9 @@
 .vs
 .idea
 .vscode
-
+log
+src/main/java/jn_s17204117/template
+docs/*
 # Created by https://www.gitignore.io/api/osx,java,eclipse,intellij,maven
 # Edit at https://www.gitignore.io/?templates=osx,java,eclipse,intellij,maven
 

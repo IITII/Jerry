@@ -1,4 +1,4 @@
-package utils;
+package jn_s17204117.utils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +40,6 @@ public class JerryDate {
      * @return String 文件名
      */
     public String getLogName() {
-        return dtf.format(date).replace("\\[ :\\]", "-") + ".log";
+        return dtf.format(date).replaceAll("[ :]", "-") + ".log";
     }
 }

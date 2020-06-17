@@ -1,6 +1,6 @@
-package utils;
+package jn_s17204117.utils;
 
-import models.ReadProperties;
+import jn_s17204117.models.ReadProperties;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author IITII
  */
 public class JerryLogger {
-    private final static String PROP_FILENAME = "conf/logging.properties";
+    private final static String PROP_FILENAME = "/conf/logging.properties";
     private final static String LOG_LEVEL = "INFO";
 
     /**
@@ -35,11 +35,12 @@ public class JerryLogger {
      *
      * @param loggerName logger 名称
      * @return Logger
+     * @throws IOException Properties 加载异常
      */
     public static Logger getLogger(String loggerName) throws IOException {
         Properties properties = new ReadProperties(
-                JerryLogger.class.getResource(PROP_FILENAME).toString()
-        ).getProp();
+                JerryLogger.class.getResource(PROP_FILENAME).getPath()
+        ).loadPropertiesFile();
 
         //获取日志器名称，默认为 Jerry
         Logger logger = Logger.getLogger(
@@ -68,12 +69,15 @@ public class JerryLogger {
 
     private static Path getOrCreateLogFile(String filename) throws IOException {
         Properties properties = new ReadProperties(
-                JerryLogger.class.getResource(PROP_FILENAME).toString()
-        ).getProp();
+                JerryLogger.class.getResource(PROP_FILENAME).getPath()
+        ).loadPropertiesFile();
         Path configFilePath = Paths.get(
-                JerryLogger.class.getResource(PROP_FILENAME).toString(),
                 properties.getOrDefault("log.path", "").toString()
         );
+//        Path configFilePath = Paths.get(
+//                JerryLogger.class.getResource(PROP_FILENAME).getPath(),
+//                properties.getOrDefault("log.path", "").toString()
+//        );
         //若日志文件夹不存在，直接创建
         if (!Files.exists(configFilePath)) {
             Files.createDirectory(configFilePath);

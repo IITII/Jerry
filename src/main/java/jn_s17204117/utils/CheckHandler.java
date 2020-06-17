@@ -1,4 +1,4 @@
-package utils;
+package jn_s17204117.utils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +13,12 @@ public class CheckHandler {
         return properties.getProperty(key) != null;
     }
 
+    /**
+     * 判断配置文件类型
+     *
+     * @param properties 配置文件
+     * @return 是否为 Https 配置文件
+     */
     public static Boolean isHttps(Properties properties) {
         String[] httpsTag = "ssl.key ssl.crt".split("\\s");
         for (String s : httpsTag) {

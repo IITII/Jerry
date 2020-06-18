@@ -21,7 +21,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  * @author IITII
@@ -81,7 +80,8 @@ public class SingleServer {
         httpServer.stop(0);
     }
 
-    public void httpsServerStart() throws IOException {
+    public void httpsServerStart() {
+        JerryLogger logger = new JerryLogger();
         try {
             InetSocketAddress address = new InetSocketAddress(
                     InetAddress.getByName(serverProp.getProperty("address")),
@@ -129,25 +129,18 @@ public class SingleServer {
                         SSLParameters sslParameters = c.getDefaultSSLParameters();
                         params.setSSLParameters(sslParameters);
                     } catch (Exception ex) {
-                        Logger log = null;
-                        try {
-                            log = JerryLogger.getLogger("");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        assert log != null;
-                        log.severe(ex.getLocalizedMessage());
-                        log.severe("Failed to create HTTPS port");
+                        logger.severe(ex.getLocalizedMessage());
+                        logger.severe("Failed to create HTTPS port");
                     }
                 }
             });
             httpsServer.createContext("/", new JerryHandle(factory, serverProp));
             httpsServer.start();
-
         } catch (Exception exception) {
-            JerryLogger.getLogger("").severe(exception.getLocalizedMessage());
+            logger.severe(exception.getLocalizedMessage());
             exception.printStackTrace();
         }
+        logger.close();
     }
 
     public void httpsServerStop() {

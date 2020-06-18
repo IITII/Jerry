@@ -66,9 +66,14 @@ public class AutoIndexHandle extends HttpMethodHandle {
         } else if (path.toFile().isDirectory()) {
             File[] files = path.toFile().listFiles();
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<pre>")
-                    .append("<a href=\"../\">../</a>")
-                    .append("<br>");
+            stringBuilder.append("<pre>");
+            if ("/".equals(httpExchange.getRequestURI().toString())) {
+                // url = "/"
+                stringBuilder.append("<a href=\"./\">./</a>");
+            } else {
+                stringBuilder.append("<a href=\"../\">../</a>");
+            }
+            stringBuilder.append("<br>");
             if (files != null) {
                 for (File file : files) {
                     // / 而不是 ./
@@ -84,8 +89,11 @@ public class AutoIndexHandle extends HttpMethodHandle {
                     stringBuilder
                             .append(file.getName())
                             .append("\">")
-                            .append(file.getName())
-                            .append("</a>")
+                            .append(file.getName());
+                    if (file.isDirectory()) {
+                        stringBuilder.append("/");
+                    }
+                    stringBuilder.append("</a>")
                             .append("<br>");
                 }
             }

@@ -10,7 +10,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  * @author IITII
@@ -32,8 +31,8 @@ public class Servers {
         factory.prestartCoreThread();
     }
 
-    public void start() throws IOException {
-        Logger logger = JerryLogger.getLogger("");
+    public void start() {
+        JerryLogger logger = new JerryLogger();
         File dir = new File(siteDir);
         // 一定要是一个文件夹
         if (!dir.isDirectory()) {
@@ -69,5 +68,6 @@ public class Servers {
                 }
             });
         }
+        logger.close();
     }
 }

@@ -20,7 +20,9 @@ public class HttpMethodHandle implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        JerryLogger.getLogger("").info(logReq(httpExchange));
+        JerryLogger logger = new JerryLogger();
+        logger.info(logReq(httpExchange));
+        logger.close();
     }
 
     /**

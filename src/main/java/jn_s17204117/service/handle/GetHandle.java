@@ -30,6 +30,7 @@ public class GetHandle extends HttpMethodHandle {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         super.handle(httpExchange);
+        JerryLogger logger = new JerryLogger();
         String url = httpExchange.getRequestURI().toString();
         if (url.matches("^/[\\s\\S]*")) {
             Path path = Paths.get(properties.getProperty("root"), url);
@@ -39,9 +40,10 @@ public class GetHandle extends HttpMethodHandle {
                 return;
             }
             if (httpExchange.getRequestURI().getQuery() != null) {
-                JerryLogger.getLogger("").info(httpExchange.getRequestURI()
+                logger.info(httpExchange.getRequestURI()
                         + ": "
                         + httpExchange.getRequestURI().getQuery());
+                logger.close();
             }
             if (file.isDirectory()) {
                 file = new File(

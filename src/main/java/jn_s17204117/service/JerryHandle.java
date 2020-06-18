@@ -10,7 +10,6 @@ import jn_s17204117.utils.JerryLogger;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.logging.Logger;
 
 /**
  * 目前只支持 GET, POST
@@ -27,8 +26,8 @@ public class JerryHandle implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        Logger logger = JerryLogger.getLogger("");
+    public void handle(HttpExchange httpExchange) {
+        JerryLogger logger = new JerryLogger();
         factory.execute(() -> {
             try {
                 if (Boolean.parseBoolean(properties.getProperty("autoindex"))) {
@@ -47,5 +46,6 @@ public class JerryHandle implements HttpHandler {
                 e.printStackTrace();
             }
         });
+        logger.close();
     }
 }

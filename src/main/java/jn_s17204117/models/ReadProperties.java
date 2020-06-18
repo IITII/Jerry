@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 
 /**
@@ -31,8 +30,9 @@ public class ReadProperties {
         if (new CheckProperties().checkProp(properties)) {
             return properties;
         }
-        Logger logger = JerryLogger.getLogger("");
+        JerryLogger logger = new JerryLogger();
         logger.severe("Error conf. Exiting...");
+        logger.close();
         //Thread.currentThread().interrupt();
         System.exit(1);
         return null;

@@ -30,7 +30,8 @@ public class PostHandle extends HttpMethodHandle {
         outputStream.write(bytes);
         outputStream.flush();
         outputStream.close();
-        JerryLogger.getLogger("")
-                .info(logReq(httpExchange));
+        JerryLogger logger = new JerryLogger();
+        logger.info(logReq(httpExchange));
+        logger.close();
     }
 }

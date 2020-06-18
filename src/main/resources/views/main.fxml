@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="views.Main"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<GridPane minHeight="200" minWidth="400" prefHeight="400.0" prefWidth="600.0" maxHeight="-Infinity"
+          maxWidth="-Infinity"
+          fx:id="root"
+          xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="jn_s17204117.controller.MainCtrl">
+    <HBox>
+        <JFXButton
+                fx:id="start"
+                onAction="#serverStart"
+                style=" -fx-padding: 0.7em 0.57em;
+                                                        -fx-font-size: 14px;
+                                                        -jfx-button-type: RAISED;
+                                                        -fx-background-color: rgb(54, 162, 235);
+                                                        -fx-pref-width: 80;
+                                                        -fx-text-fill: WHITE;">启动
+        </JFXButton>
+        <JFXButton
+                fx:id="stop"
+                onAction="#serverStop"
+                style=" -fx-padding: 0.7em 0.57em;
+                                                        -fx-font-size: 14px;
+                                                        -jfx-button-type: RAISED;
+                                                        -fx-background-color: rgb(77,102,204);
+                                                        -fx-pref-width: 80;
+                                                        -fx-text-fill: WHITE;">关闭
+        </JFXButton>
+        <JFXButton
+                fx:id="forceStop"
+                onAction="#serverForceStop"
+                style=" -fx-padding: 0.7em 0.57em;
+                                                        -fx-font-size: 14px;
+                                                        -jfx-button-type: RAISED;
+                                                        -fx-background-color: rgb(255, 99, 132);
+                                                        -fx-pref-width: 80;
+                                                        -fx-text-fill: WHITE;">强制停止
+        </JFXButton>
+    </HBox>
+</GridPane>

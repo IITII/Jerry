@@ -18,20 +18,23 @@ public class Servers {
     /**
      * https://blog.csdn.net/u011517841/article/details/79810689
      */
-    private final ThreadPoolExecutor factory = new ThreadPoolExecutor(50,
-            Integer.MAX_VALUE / 100,
-            5,
-            TimeUnit.SECONDS,
-            new LinkedBlockingDeque<>(),
-            (ThreadFactory) Thread::new);
+    private ThreadPoolExecutor factory = null;
     private final String siteDir = Objects.requireNonNull(getClass().getClassLoader().getResource("conf/sites")).getFile();
 
     public void init() {
+        factory = new ThreadPoolExecutor(50,
+                Integer.MAX_VALUE / 100,
+                5,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(),
+                (ThreadFactory) Thread::new);
         // 因为站点数量一般不般比较少，而且不会频繁变动，故只预热一个线程
         factory.prestartCoreThread();
     }
 
     public void start() {
+        // 初始化一些东西
+        init();
         JerryLogger logger = new JerryLogger();
         File dir = new File(siteDir);
         // 一定要是一个文件夹
@@ -43,8 +46,6 @@ public class Servers {
             logger.info("空站点文件夹...");
             return;
         }
-        // 初始化一些东西
-        init();
         // 遍历文件夹, 创建多个
         for (File file : files) {
             //避免遍历一些奇奇怪怪的东西
@@ -69,5 +70,41 @@ public class Servers {
             });
         }
         logger.close();
+    }
+
+    /**
+     * 停止服务
+     *
+     * @return true: success, false: failed
+     */
+    public Boolean stop() {
+        try {
+            factory.shutdown();
+            return true;
+        } catch (Exception e) {
+            JerryLogger logger = new JerryLogger();
+            logger.severe(e.getLocalizedMessage());
+            logger.close();
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 强制停止
+     *
+     * @return true: success, false: failed
+     */
+    public Boolean forceStop() {
+        try {
+            factory.shutdownNow();
+            return true;
+        } catch (Exception e) {
+            JerryLogger logger = new JerryLogger();
+            logger.severe(e.getLocalizedMessage());
+            logger.close();
+            e.printStackTrace();
+            return false;
+        }
     }
 }

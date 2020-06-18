@@ -1,9 +1,9 @@
 package jn_s17204117.controller;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import jn_s17204117.service.Servers;
 import jn_s17204117.utils.JerryLogger;
@@ -17,7 +17,7 @@ public class MainCtrl {
     @FXML
     private GridPane root;
     @FXML
-    private JFXButton start, stop, forceStop;
+    private Button start, stop, forceStop;
 
     private final Servers servers = new Servers();
 
@@ -31,6 +31,9 @@ public class MainCtrl {
         try {
             servers.start();
             alert(Alert.AlertType.INFORMATION, "", null, "启动成功");
+            start.setDisable(true);
+            stop.setDisable(false);
+            forceStop.setDisable(false);
         } catch (Exception e) {
             alert(Alert.AlertType.ERROR, "", "启动失败", "请检查系统日志");
             JerryLogger logger = new JerryLogger();
@@ -49,6 +52,9 @@ public class MainCtrl {
     public void serverStop(ActionEvent actionEvent) {
         if (servers.stop()) {
             alert(Alert.AlertType.INFORMATION, "", null, "关闭成功");
+            start.setDisable(false);
+            stop.setDisable(true);
+            forceStop.setDisable(true);
         } else {
             alert(Alert.AlertType.ERROR, "", null, "关闭失败");
         }
@@ -63,6 +69,9 @@ public class MainCtrl {
     public void serverForceStop(ActionEvent actionEvent) {
         if (servers.forceStop()) {
             alert(Alert.AlertType.INFORMATION, "", null, "强制关闭成功");
+            start.setDisable(false);
+            stop.setDisable(true);
+            forceStop.setDisable(true);
         } else {
             alert(Alert.AlertType.ERROR, "", null, "强制关闭失败");
         }

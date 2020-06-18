@@ -83,8 +83,11 @@ public class AutoIndexHandle extends HttpMethodHandle {
                                 httpExchange.getRequestURI()
                                         .toString()
                                         .substring(1)
-                        )
-                                .append("/");
+                        );
+                        // 判断URL最后一个字符，避免重复 ///
+                        if (!"/".equals(stringBuilder.substring(stringBuilder.length() - 1))) {
+                            stringBuilder.append("/");
+                        }
                     }
                     stringBuilder
                             .append(file.getName())

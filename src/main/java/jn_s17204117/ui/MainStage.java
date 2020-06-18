@@ -13,20 +13,20 @@ import javafx.stage.Stage;
  *
  * @author IITII
  */
-public class Main extends Application {
+public class MainStage extends Application {
 
     final String title = "Jerry";
-    final int defaultWidth = 600;
-    final int defaultHeight = 400;
+    final int defaultWidth = 500;
+    final int defaultHeight = 240;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/views/main.fxml"));
         primaryStage.setTitle(title);
-        primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/icon.png")));
+        primaryStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("/images/icon.png")));
         Scene scene = new Scene(root, defaultWidth, defaultHeight);
         primaryStage.setScene(scene);
-//        primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

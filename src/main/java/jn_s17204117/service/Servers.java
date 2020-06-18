@@ -5,6 +5,7 @@ import jn_s17204117.utils.JerryLogger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
@@ -20,8 +21,10 @@ public class Servers {
      */
     private ThreadPoolExecutor factory = null;
     private final String siteDir = Objects.requireNonNull(getClass().getClassLoader().getResource("conf/sites")).getFile();
+    private final ArrayList<SingleServer> servers = new ArrayList<>();
 
     public void init() {
+        // 必须重复创建线程池，因为下面调用了 shutdown 方法
         factory = new ThreadPoolExecutor(50,
                 Integer.MAX_VALUE / 100,
                 5,
@@ -32,7 +35,7 @@ public class Servers {
         factory.prestartCoreThread();
     }
 
-    public void start() {
+    public void start() throws IOException {
         // 初始化一些东西
         init();
         JerryLogger logger = new JerryLogger();
@@ -52,17 +55,19 @@ public class Servers {
             if (!file.isFile()) {
                 return;
             }
+            final SingleServer singleServer = new SingleServer(
+                    new ReadProperties(
+                            file.getAbsolutePath()
+                    ).getProp()
+            );
+            servers.add(singleServer);
             /*
             无需考虑多个不同请求同时发生的情况，因为端口不同
             也不需要根据 HttpExchange 里面 header 来进行分流
              */
             factory.execute(() -> {
                 try {
-                    new SingleServer(
-                            new ReadProperties(
-                                    file.getAbsolutePath()
-                            ).getProp()
-                    ).start();
+                    singleServer.start();
                 } catch (IOException e) {
                     logger.severe(e.getLocalizedMessage());
                     e.printStackTrace();
@@ -79,6 +84,9 @@ public class Servers {
      */
     public Boolean stop() {
         try {
+            for (SingleServer s : servers) {
+                s.stop();
+            }
             factory.shutdown();
             return true;
         } catch (Exception e) {
@@ -97,6 +105,9 @@ public class Servers {
      */
     public Boolean forceStop() {
         try {
+            for (SingleServer s : servers) {
+                s.stop();
+            }
             factory.shutdownNow();
             return true;
         } catch (Exception e) {

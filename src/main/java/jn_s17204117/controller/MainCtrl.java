@@ -36,9 +36,7 @@ public class MainCtrl {
             forceStop.setDisable(false);
         } catch (Exception e) {
             alert(Alert.AlertType.ERROR, "", "启动失败", "请检查系统日志");
-            JerryLogger logger = new JerryLogger();
-            logger.severe(e.getLocalizedMessage());
-            logger.close();
+            JerryLogger.getJerryLogger().severe(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }
@@ -50,6 +48,7 @@ public class MainCtrl {
      */
     @FXML
     public void serverStop(ActionEvent actionEvent) {
+        JerryLogger.getJerryLogger().close();
         if (servers.stop()) {
             alert(Alert.AlertType.INFORMATION, "", null, "关闭成功");
             start.setDisable(false);
@@ -67,6 +66,7 @@ public class MainCtrl {
      */
     @FXML
     public void serverForceStop(ActionEvent actionEvent) {
+        JerryLogger.getJerryLogger().close();
         if (servers.forceStop()) {
             alert(Alert.AlertType.INFORMATION, "", null, "强制关闭成功");
             start.setDisable(false);

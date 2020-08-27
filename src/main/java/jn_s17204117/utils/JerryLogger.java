@@ -19,14 +19,36 @@ public class JerryLogger {
     private final static String PROP_FILENAME = "/conf/logging.properties";
     private final static String LOG_LEVEL = "INFO";
     private static FileHandler fileHandler = null;
-    private final Logger logger;
+    private static Logger logger;
 
-    public JerryLogger() {
-        logger = getLogger("");
+    // Single Instance
+
+    private volatile static JerryLogger jerryLogger;
+
+    private JerryLogger(String loggerName) {
+        logger = getLogger(loggerName);
     }
 
-    public JerryLogger(String loggerName) {
-        logger = getLogger(loggerName);
+    public static JerryLogger getJerryLogger() {
+        if (jerryLogger == null) {
+            synchronized (JerryLogger.class) {
+                if (jerryLogger == null) {
+                    jerryLogger = new JerryLogger("");
+                }
+            }
+        }
+        return jerryLogger;
+    }
+
+    public static JerryLogger getJerryLogger(String loggerName) {
+        if (jerryLogger == null) {
+            synchronized (JerryLogger.class) {
+                if (jerryLogger == null) {
+                    jerryLogger = new JerryLogger(loggerName);
+                }
+            }
+        }
+        return jerryLogger;
     }
 
     /**
@@ -44,9 +66,10 @@ public class JerryLogger {
      * ALL              最小整数（Integer. MIN_VALUE）
      *
      * @param loggerName logger 名称
+     *
      * @return Logger
      */
-    public Logger getLogger(String loggerName) {
+    private Logger getLogger(String loggerName) {
         try {
             Properties properties = new ReadProperties(
                     JerryLogger.class.getResource(PROP_FILENAME).getPath()
@@ -84,6 +107,7 @@ public class JerryLogger {
     }
 
     public void close() {
+        jerryLogger = null;
         if (fileHandler != null) {
             // 关闭 fileHandler 避免重复创建日志文件
             fileHandler.close();

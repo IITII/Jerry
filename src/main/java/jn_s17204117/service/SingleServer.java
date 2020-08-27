@@ -81,7 +81,7 @@ public class SingleServer {
     }
 
     public void httpsServerStart() {
-        JerryLogger logger = new JerryLogger();
+        JerryLogger logger = JerryLogger.getJerryLogger();
         try {
             InetSocketAddress address = new InetSocketAddress(
                     InetAddress.getByName(serverProp.getProperty("address")),
@@ -140,7 +140,6 @@ public class SingleServer {
             logger.severe(exception.getLocalizedMessage());
             exception.printStackTrace();
         }
-        logger.close();
     }
 
     public void httpsServerStop() {

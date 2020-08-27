@@ -38,7 +38,7 @@ public class Servers {
     public void start() throws IOException {
         // 初始化一些东西
         init();
-        JerryLogger logger = new JerryLogger();
+        JerryLogger logger = JerryLogger.getJerryLogger();
         File dir = new File(siteDir);
         // 一定要是一个文件夹
         if (!dir.isDirectory()) {
@@ -74,7 +74,6 @@ public class Servers {
                 }
             });
         }
-        logger.close();
     }
 
     /**
@@ -90,9 +89,7 @@ public class Servers {
             factory.shutdown();
             return true;
         } catch (Exception e) {
-            JerryLogger logger = new JerryLogger();
-            logger.severe(e.getLocalizedMessage());
-            logger.close();
+            JerryLogger.getJerryLogger().severe(e.getLocalizedMessage());
             e.printStackTrace();
             return false;
         }
@@ -111,9 +108,7 @@ public class Servers {
             factory.shutdownNow();
             return true;
         } catch (Exception e) {
-            JerryLogger logger = new JerryLogger();
-            logger.severe(e.getLocalizedMessage());
-            logger.close();
+            JerryLogger.getJerryLogger().severe(e.getLocalizedMessage());
             e.printStackTrace();
             return false;
         }

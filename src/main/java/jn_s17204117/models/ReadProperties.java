@@ -30,9 +30,7 @@ public class ReadProperties {
         if (new CheckProperties().checkProp(properties)) {
             return properties;
         }
-        JerryLogger logger = new JerryLogger();
-        logger.severe("Error conf. Exiting...");
-        logger.close();
+        JerryLogger.getJerryLogger().severe("Error conf. Exiting...");
         //Thread.currentThread().interrupt();
         System.exit(1);
         return null;

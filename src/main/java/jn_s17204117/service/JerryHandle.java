@@ -27,7 +27,7 @@ public class JerryHandle implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) {
-        JerryLogger logger = new JerryLogger();
+        JerryLogger logger = JerryLogger.getJerryLogger();
         factory.execute(() -> {
             try {
                 if (Boolean.parseBoolean(properties.getProperty("autoindex"))) {
@@ -46,6 +46,5 @@ public class JerryHandle implements HttpHandler {
                 e.printStackTrace();
             }
         });
-        logger.close();
     }
 }
